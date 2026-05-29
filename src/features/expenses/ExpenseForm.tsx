@@ -101,7 +101,8 @@ export function ExpenseForm({ spaceId, expenseToEdit, onClose }: ExpenseFormProp
   const splitAmount = participantCount > 0 ? (numericAmount / participantCount).toFixed(2) : '0.00';
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+
       {/* Tap outside container to close */}
       <div className="absolute inset-0" onClick={onClose} />
 

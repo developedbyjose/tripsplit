@@ -147,7 +147,8 @@ export function SettlementSummary({ spaceId }: SettlementSummaryProps) {
 
       {/* Confirmation Modal */}
       {settlingDebt && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in">
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in">
+
           <div className="absolute inset-0" onClick={() => setSettlingDebt(null)} />
           <div className="w-full sm:max-w-xs bg-slate-950 sm:rounded-3xl rounded-t-3xl border-t sm:border border-slate-800 p-5 space-y-4 z-10 animate-slide-up shadow-2xl relative text-center">
             <div className="inline-flex p-3 rounded-full bg-primary/10 text-primary mb-1">

@@ -93,7 +93,7 @@ export function Dashboard({ spaceId }: DashboardProps) {
       </div>
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Expense */}
         <div className="glass-panel rounded-2xl p-4 flex flex-col justify-between h-[100px] relative overflow-hidden">
           <div className="flex items-center justify-between text-slate-400">
@@ -157,15 +157,15 @@ export function Dashboard({ spaceId }: DashboardProps) {
 
       {/* Visual Analytics */}
       {expenses.length > 0 && (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Category Pie Chart */}
           {pieChartData.length > 0 && (
-            <div className="glass-panel rounded-2xl p-4 space-y-3">
+            <div className="glass-panel rounded-2xl p-5 space-y-3 flex flex-col justify-between">
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                 <PieChartIcon className="w-4 h-4 text-primary" /> Spending by Category
               </h3>
               
-              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center flex-1">
                 <div className="w-[140px] h-[140px] shrink-0">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -187,11 +187,11 @@ export function Dashboard({ spaceId }: DashboardProps) {
                   </ResponsiveContainer>
                 </div>
 
-                <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center text-[10px] max-w-xs">
+                <div className="flex flex-col gap-y-2 text-[10px] max-w-xs justify-center">
                   {pieChartData.map((entry) => (
                     <div key={entry.name} className="flex items-center gap-1.5 font-medium text-slate-300">
-                      <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[entry.name] }} />
-                      <span>{entry.name}: ₱{entry.value.toFixed(0)}</span>
+                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: CATEGORY_COLORS[entry.name] }} />
+                      <span className="truncate">{entry.name}: ₱{entry.value.toFixed(0)}</span>
                     </div>
                   ))}
                 </div>
@@ -200,12 +200,12 @@ export function Dashboard({ spaceId }: DashboardProps) {
           )}
 
           {/* Contributions Bar Chart */}
-          <div className="glass-panel rounded-2xl p-4 space-y-3">
+          <div className="glass-panel rounded-2xl p-5 space-y-3 flex flex-col justify-between">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <BarChart2 className="w-4 h-4 text-primary" /> Spenders Comparison
             </h3>
 
-            <div className="w-full h-[160px] pr-4">
+            <div className="w-full h-[160px] pr-4 flex-1">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={barChartData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
                   <XAxis dataKey="name" stroke="#64748b" fontSize={9} tickLine={false} />
