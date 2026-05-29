@@ -24,7 +24,8 @@ import {
   LogOut,
   QrCode,
   Copy,
-  Users
+  Users,
+  Settings
 } from 'lucide-react';
 
 
@@ -207,6 +208,17 @@ export function AppLayout() {
           </div>
 
           <div className="flex items-center gap-1.5">
+            {activeSpaceId && (
+              <button
+                onClick={() => setActiveTab(activeTab === 'settings' ? 'dashboard' : 'settings')}
+                className={`p-1.5 rounded-lg hover:bg-slate-900 transition-colors cursor-pointer shrink-0 ${
+                  activeTab === 'settings' ? 'text-primary' : 'text-slate-400 hover:text-white'
+                }`}
+                title="Trip Settings"
+              >
+                <Settings className="w-4.5 h-4.5" />
+              </button>
+            )}
             <img
               src={profile?.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile?.id}`}
               alt=""
@@ -253,47 +265,48 @@ export function AppLayout() {
             </div>
 
             {/* Navigation Tabs */}
-            <nav className="fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto border-t border-slate-900/80 bg-slate-950/80 backdrop-blur-lg px-4 py-2.5 z-30 grid grid-cols-5 gap-1 text-center">
+            <nav className="fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto border-t border-slate-900/80 bg-slate-950/80 backdrop-blur-lg z-30 grid grid-cols-5 w-full">
               <button
                 onClick={() => setActiveTab('dashboard')}
-                className={`flex flex-col items-center gap-1 transition-all ${
-                  activeTab === 'dashboard' ? 'text-primary scale-102' : 'text-slate-500 hover:text-slate-300'
+                className={`flex flex-col items-center justify-center gap-1 py-2.5 overflow-hidden transition-all ${
+                  activeTab === 'dashboard' ? 'text-primary' : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
-                <LayoutDashboard className="w-5 h-5" />
-                <span className="text-[8px] font-bold uppercase tracking-wider">Overview</span>
+                <LayoutDashboard className="w-5 h-5 shrink-0" />
+                <span className="text-[8px] font-bold uppercase tracking-wider w-full text-center truncate px-1">Overview</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('expenses')}
-                className={`flex flex-col items-center gap-1 transition-all ${
-                  activeTab === 'expenses' ? 'text-primary scale-102' : 'text-slate-500 hover:text-slate-300'
+                className={`flex flex-col items-center justify-center gap-1 py-2.5 overflow-hidden transition-all ${
+                  activeTab === 'expenses' ? 'text-primary' : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
-                <Receipt className="w-5 h-5" />
-                <span className="text-[8px] font-bold uppercase tracking-wider">Expenses</span>
+                <Receipt className="w-5 h-5 shrink-0" />
+                <span className="text-[8px] font-bold uppercase tracking-wider w-full text-center truncate px-1">Expenses</span>
               </button>
 
-              <div className="w-10 h-10 shrink-0" /* Empty spacer for FAB alignment */ />
+              {/* FAB spacer — exactly 1/5 cell in the grid */}
+              <div />
 
               <button
                 onClick={() => setActiveTab('settlements')}
-                className={`flex flex-col items-center gap-1 transition-all ${
-                  activeTab === 'settlements' ? 'text-primary scale-102' : 'text-slate-500 hover:text-slate-300'
+                className={`flex flex-col items-center justify-center gap-1 py-2.5 overflow-hidden transition-all ${
+                  activeTab === 'settlements' ? 'text-primary' : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
-                <CheckCircle className="w-5 h-5" />
-                <span className="text-[8px] font-bold uppercase tracking-wider">Settle</span>
+                <CheckCircle className="w-5 h-5 shrink-0" />
+                <span className="text-[8px] font-bold uppercase tracking-wider w-full text-center truncate px-1">Settle</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('activity')}
-                className={`flex flex-col items-center gap-1 transition-all ${
-                  activeTab === 'activity' ? 'text-primary scale-102' : 'text-slate-500 hover:text-slate-300'
+                className={`flex flex-col items-center justify-center gap-1 py-2.5 overflow-hidden transition-all ${
+                  activeTab === 'activity' ? 'text-primary' : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
-                <Activity className="w-5 h-5" />
-                <span className="text-[8px] font-bold uppercase tracking-wider">Activity</span>
+                <Activity className="w-5 h-5 shrink-0" />
+                <span className="text-[8px] font-bold uppercase tracking-wider w-full text-center truncate px-1">Activity</span>
               </button>
             </nav>
           </>
