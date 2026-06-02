@@ -21,6 +21,28 @@ const CATEGORY_COLORS: Record<string, string> = {
 export function Dashboard({ spaceId }: DashboardProps) {
   const { profile } = useAuth();
   const { formatMoney } = useCurrency();
+  const chartTooltipStyle = {
+    backgroundColor: 'rgba(15, 23, 42, 0.96)',
+    border: '1px solid rgba(148, 163, 184, 0.2)',
+    borderRadius: '10px',
+    boxShadow: '0 12px 24px rgba(15, 23, 42, 0.24)',
+    fontSize: '11px',
+    lineHeight: '1.2',
+    padding: '6px 8px',
+  } as const;
+  const chartTooltipItemStyle = {
+    color: '#e2e8f0',
+    fontSize: '11px',
+    fontWeight: 600,
+    margin: 0,
+    padding: 0,
+  } as const;
+  const chartTooltipLabelStyle = {
+    color: '#94a3b8',
+    fontSize: '10px',
+    fontWeight: 600,
+    marginBottom: '2px',
+  } as const;
 
   const { data: members = [] } = useQuery({
     queryKey: ['members', spaceId],
@@ -186,6 +208,9 @@ export function Dashboard({ spaceId }: DashboardProps) {
                         ))}
                       </Pie>
                       <Tooltip
+                        contentStyle={chartTooltipStyle}
+                        itemStyle={chartTooltipItemStyle}
+                        labelStyle={chartTooltipLabelStyle}
                         formatter={(value) =>
                           formatMoney(Number(value), {
                             minimumFractionDigits: 0,
@@ -223,6 +248,9 @@ export function Dashboard({ spaceId }: DashboardProps) {
                   <XAxis dataKey="name" stroke="#64748b" fontSize={9} tickLine={false} />
                   <YAxis stroke="#64748b" fontSize={9} tickLine={false} axisLine={false} />
                   <Tooltip
+                    contentStyle={chartTooltipStyle}
+                    itemStyle={chartTooltipItemStyle}
+                    labelStyle={chartTooltipLabelStyle}
                     formatter={(value) =>
                       formatMoney(Number(value), {
                         minimumFractionDigits: 0,
