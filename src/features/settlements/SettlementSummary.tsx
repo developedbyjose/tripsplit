@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import { calculateBalances, simplifyDebts } from '../../utils/settlementUtils';
+import { useCurrency } from '../../hooks/useCurrencySetting';
 import { CheckCircle2, DollarSign, Award, Landmark } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -12,6 +13,7 @@ interface SettlementSummaryProps {
 export function SettlementSummary({ spaceId }: SettlementSummaryProps) {
   const queryClient = useQueryClient();
   const [settlingDebt, setSettlingDebt] = useState<{ debtorId: string; creditorId: string; amount: number } | null>(null);
+  const { formatMoney } = useCurrency();
 
   const { data: members = [] } = useQuery({
     queryKey: ['members', spaceId],
@@ -82,14 +84,15 @@ export function SettlementSummary({ spaceId }: SettlementSummaryProps) {
                   <div>
                     <h4 className="text-white text-xs font-bold">{b.name}</h4>
                     <p className="text-[9px] text-slate-400 mt-0.5">
-                      Paid: ₱{b.totalPaid.toFixed(0)} • Owed: ₱{b.totalOwed.toFixed(0)}
+                      Paid: {formatMoney(b.totalPaid, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} • Owed: {formatMoney(b.totalOwed, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                     </p>
                   </div>
                 </div>
 
                 <div className="text-right">
                   <span className={`text-xs font-extrabold ${isOwed ? 'text-emerald-400' : 'text-red-400'}`}>
-                    {isOwed ? '+' : ''}₱{b.netBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    {isOwed ? '+' : ''}
+                    {formatMoney(b.netBalance)}
                   </span>
                   <p className="text-[8px] text-slate-500 mt-0.5">
                     {isOwed ? 'receives' : 'owes'}
@@ -130,7 +133,7 @@ export function SettlementSummary({ spaceId }: SettlementSummaryProps) {
 
                 <div className="flex items-center gap-3">
                   <span className="text-white font-extrabold text-sm">
-                    ₱{debt.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    {formatMoney(debt.amount)}
                   </span>
                   <button
                     onClick={() => setSettlingDebt(debt)}
@@ -156,11 +159,11 @@ export function SettlementSummary({ spaceId }: SettlementSummaryProps) {
             </div>
             <div>
               <h3 className="text-white font-bold text-sm">Record Payment</h3>
-              <p className="text-xs text-slate-400 mt-1">
-                Confirm that <span className="font-semibold text-white">{getMemberName(settlingDebt.debtorId)}</span> paid{' '}
-                <span className="font-semibold text-white">{getMemberName(settlingDebt.creditorId)}</span> the amount of{' '}
-                <span className="font-bold text-primary">₱{settlingDebt.amount}</span>.
-              </p>
+                <p className="text-xs text-slate-400 mt-1">
+                  Confirm that <span className="font-semibold text-white">{getMemberName(settlingDebt.debtorId)}</span> paid{' '}
+                  <span className="font-semibold text-white">{getMemberName(settlingDebt.creditorId)}</span> the amount of{' '}
+                  <span className="font-bold text-primary">{formatMoney(settlingDebt.amount)}</span>.
+                </p>
             </div>
             <div className="flex gap-2 pt-2">
               <button

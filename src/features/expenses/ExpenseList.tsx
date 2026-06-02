@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import type { Expense } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
+import { useCurrency } from '../../hooks/useCurrencySetting';
 import { Trash2, Edit3, History } from 'lucide-react';
 
 interface ExpenseListProps {
@@ -13,6 +14,7 @@ interface ExpenseListProps {
 export function ExpenseList({ spaceId, onEditExpense }: ExpenseListProps) {
   const queryClient = useQueryClient();
   const { profile } = useAuth();
+  const { formatMoney } = useCurrency();
   const [selectedExpenseForHistory, setSelectedExpenseForHistory] = useState<string | null>(null);
 
   const { data: members = [] } = useQuery({
@@ -119,7 +121,7 @@ export function ExpenseList({ spaceId, onEditExpense }: ExpenseListProps) {
                     </div>
                     <div className="text-right">
                       <span className="text-white font-extrabold text-sm">
-                        ₱{expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        {formatMoney(expense.amount)}
                       </span>
                       <p className="text-[9px] text-slate-400 mt-1 uppercase tracking-wider font-semibold">
                         {expense.category}
@@ -132,9 +134,9 @@ export function ExpenseList({ spaceId, onEditExpense }: ExpenseListProps) {
                     <div className="text-slate-400">
                       Split with{' '}
                       <span className="font-semibold text-slate-300">
-                        {expense.participants?.length || 0} people
+                      {expense.participants?.length || 0} people
                       </span>{' '}
-                      ({expense.participants ? `₱${(expense.amount / expense.participants.length).toFixed(0)} each` : ''})
+                      ({expense.participants ? `${formatMoney(expense.amount / expense.participants.length, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} each` : ''})
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -276,12 +278,12 @@ export function ExpenseList({ spaceId, onEditExpense }: ExpenseListProps) {
                         <td className="py-3.5 px-4 text-slate-400 text-[11px]">
                           <span>{expense.participants?.length || 0} people</span>{' '}
                           <span className="text-slate-500">
-                            ({expense.participants ? `₱${(expense.amount / expense.participants.length).toFixed(0)} each` : ''})
+                            ({expense.participants ? `${formatMoney(expense.amount / expense.participants.length, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} each` : ''})
                           </span>
                         </td>
                         <td className="py-3.5 px-4 text-right">
                           <span className="text-white font-extrabold text-xs">
-                            ₱{expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                            {formatMoney(expense.amount)}
                           </span>
                         </td>
                         <td className="py-3.5 px-4 text-right">

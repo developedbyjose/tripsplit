@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useCurrency } from '../../hooks/useCurrencySetting';
 import { History, Pencil, PlusCircle, CheckCircle, HelpCircle } from 'lucide-react';
 
 interface ActivityFeedProps {
@@ -7,6 +8,7 @@ interface ActivityFeedProps {
 }
 
 export function ActivityFeed({ spaceId }: ActivityFeedProps) {
+  const { formatMoney } = useCurrency();
   const { data: activity = [], isLoading, error } = useQuery({
     queryKey: ['space-activity', spaceId],
     queryFn: () => api.getSpaceActivityLog(spaceId),
@@ -41,13 +43,13 @@ export function ActivityFeed({ spaceId }: ActivityFeedProps) {
         return {
           icon: <Pencil className="w-3.5 h-3.5 text-amber-400" />,
           text: (
-            <span>
-              <strong className="text-white font-semibold">{editor}</strong> updated amount to{' '}
-              <strong className="text-emerald-400">₱{h.new_value}</strong>{' '}
-              <span className="text-slate-500 line-through">(was ₱{h.old_value})</span>
-            </span>
-          )
-        };
+              <span>
+                <strong className="text-white font-semibold">{editor}</strong> updated amount to{' '}
+              <strong className="text-emerald-400">{formatMoney(Number(h.new_value))}</strong>{' '}
+              <span className="text-slate-500 line-through">(was {formatMoney(Number(h.old_value))})</span>
+              </span>
+            )
+          };
       case 'category':
         return {
           icon: <Pencil className="w-3.5 h-3.5 text-violet-400" />,

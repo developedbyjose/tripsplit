@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
+import { useCurrency } from '../../hooks/useCurrencySetting';
 import { calculateBalances, simplifyDebts } from '../../utils/settlementUtils';
 import { DollarSign, UserCheck, TrendingUp, Sparkles, PieChartIcon, BarChart2 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
@@ -19,6 +20,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export function Dashboard({ spaceId }: DashboardProps) {
   const { profile } = useAuth();
+  const { formatMoney } = useCurrency();
 
   const { data: members = [] } = useQuery({
     queryKey: ['members', spaceId],
@@ -102,7 +104,7 @@ export function Dashboard({ spaceId }: DashboardProps) {
           </div>
           <div>
             <h4 className="text-white text-lg font-extrabold">
-              ₱{totalExpense.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              {formatMoney(totalExpense, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </h4>
             <p className="text-[9px] text-slate-500 mt-1">For entire trip space</p>
           </div>
@@ -116,7 +118,8 @@ export function Dashboard({ spaceId }: DashboardProps) {
           </div>
           <div>
             <h4 className={`text-lg font-extrabold ${myBalance >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-              {myBalance >= 0 ? '+' : ''}₱{myBalance.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              {myBalance >= 0 ? '+' : ''}
+              {formatMoney(myBalance, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </h4>
             <p className="text-[9px] text-slate-500 mt-1">
               {myBalance >= 0 ? 'To receive overall' : 'To settle overall'}
@@ -135,7 +138,7 @@ export function Dashboard({ spaceId }: DashboardProps) {
               {topSpenderName}
             </h4>
             <p className="text-[9px] text-slate-500 mt-1">
-              Spent ₱{maxSpend.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              Spent {formatMoney(maxSpend, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </p>
           </div>
         </div>
@@ -148,7 +151,7 @@ export function Dashboard({ spaceId }: DashboardProps) {
           </div>
           <div>
             <h4 className="text-white text-lg font-extrabold">
-              ₱{myOwedDebt.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              {formatMoney(myOwedDebt, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </h4>
             <p className="text-[9px] text-slate-500 mt-1">Amount you owe friends</p>
           </div>
@@ -182,7 +185,14 @@ export function Dashboard({ spaceId }: DashboardProps) {
                           <Cell key={`cell-${index}`} fill={CATEGORY_COLORS[entry.name] || '#ccc'} />
                         ))}
                       </Pie>
-                      <Tooltip formatter={(value) => `₱${Number(value).toFixed(0)}`} />
+                      <Tooltip
+                        formatter={(value) =>
+                          formatMoney(Number(value), {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })
+                        }
+                      />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -191,7 +201,9 @@ export function Dashboard({ spaceId }: DashboardProps) {
                   {pieChartData.map((entry) => (
                     <div key={entry.name} className="flex items-center gap-1.5 font-medium text-slate-300">
                       <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: CATEGORY_COLORS[entry.name] }} />
-                      <span className="truncate">{entry.name}: ₱{entry.value.toFixed(0)}</span>
+                      <span className="truncate">
+                        {entry.name}: {formatMoney(entry.value, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -210,7 +222,14 @@ export function Dashboard({ spaceId }: DashboardProps) {
                 <BarChart data={barChartData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
                   <XAxis dataKey="name" stroke="#64748b" fontSize={9} tickLine={false} />
                   <YAxis stroke="#64748b" fontSize={9} tickLine={false} axisLine={false} />
-                  <Tooltip formatter={(value) => `₱${value}`} />
+                  <Tooltip
+                    formatter={(value) =>
+                      formatMoney(Number(value), {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      })
+                    }
+                  />
                   <Bar dataKey="paid" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Total Paid" />
                   <Bar dataKey="owed" fill="#4f46e5" radius={[4, 4, 0, 0]} name="Total Share" />
                 </BarChart>

@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient';
+import { formatCurrency } from '../utils/currency';
 
 export interface Space {
   id: string;
@@ -138,7 +139,7 @@ function getSandboxDB() {
         expense_id: 'exp1',
         field_name: 'created',
         old_value: null,
-        new_value: 'Tricycle Fare of ₱1800 paid by James',
+        new_value: `Tricycle Fare of ${formatCurrency(1800, 'PHP', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} paid by James`,
         edited_by: '00000000-0000-0000-0000-000000000001',
         edited_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
       },
@@ -147,7 +148,7 @@ function getSandboxDB() {
         expense_id: 'exp2',
         field_name: 'created',
         old_value: null,
-        new_value: 'Beachside Villa Airbnb of ₱6000 paid by Jose',
+        new_value: `Beachside Villa Airbnb of ${formatCurrency(6000, 'PHP', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} paid by Jose`,
         edited_by: '00000000-0000-0000-0000-000000000002',
         edited_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
       },
@@ -156,7 +157,7 @@ function getSandboxDB() {
         expense_id: 'exp3',
         field_name: 'created',
         old_value: null,
-        new_value: 'Seafood Dinner Feast of ₱2400 paid by Gly',
+        new_value: `Seafood Dinner Feast of ${formatCurrency(2400, 'PHP', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} paid by Gly`,
         edited_by: '00000000-0000-0000-0000-000000000003',
         edited_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
       }
@@ -371,7 +372,7 @@ export const api = {
         expense_id: expId,
         field_name: 'created',
         old_value: null,
-        new_value: `${expense.title} of ₱${expense.amount} paid by ${payerName}`,
+        new_value: `${expense.title} of ${formatCurrency(Number(expense.amount), 'PHP', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} paid by ${payerName}`,
         edited_by: me.id,
         edited_at: now
       });
@@ -710,7 +711,7 @@ export const api = {
         expense_id: 'exp1', // Reference root
         field_name: 'settled',
         old_value: null,
-        new_value: `${debtorName} settled debt to ${creditorName}`,
+          new_value: `${debtorName} settled debt to ${creditorName}`,
         edited_by: me?.id || debtorId,
         edited_at: now
       });

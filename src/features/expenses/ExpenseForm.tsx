@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import type { Expense } from '../../services/api';
 import { X, Tag, Landmark, Users, Clipboard } from 'lucide-react';
+import { useCurrency } from '../../hooks/useCurrencySetting';
 
 interface ExpenseFormProps {
   spaceId: string;
@@ -14,6 +15,7 @@ const CATEGORIES = ['Food', 'Lodging', 'Transport', 'Activities', 'Others'];
 
 export function ExpenseForm({ spaceId, expenseToEdit, onClose }: ExpenseFormProps) {
   const queryClient = useQueryClient();
+  const { currencySymbol, formatMoney } = useCurrency();
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('Food');
@@ -154,7 +156,7 @@ export function ExpenseForm({ spaceId, expenseToEdit, onClose }: ExpenseFormProp
           <div className="grid grid-cols-2 gap-3.5">
             <div className="space-y-1.5">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                Amount (₱)
+                Amount ({currencySymbol})
               </label>
               <input
                 type="number"
@@ -262,7 +264,7 @@ export function ExpenseForm({ spaceId, expenseToEdit, onClose }: ExpenseFormProp
           <div className="bg-slate-900/30 border border-slate-900 rounded-xl p-3.5 text-center text-xs">
             <span className="text-slate-400">Each selected participant owes:</span>
             <div className="text-lg font-extrabold text-white mt-1.5">
-              ₱{Number(splitAmount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              {formatMoney(Number(splitAmount))}
             </div>
             <p className="text-[10px] text-slate-500 mt-1">
               {participantCount} of {members.length} members selected.
